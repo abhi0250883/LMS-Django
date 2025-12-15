@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform | Course Lessons</title>
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Video.js for enhanced video player -->
+    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-light: #8B85FF;
+            --primary-dark: #554FD8;
+            --secondary: #36D1DC;
+            --accent: #FF6584;
+            --success: #00D68F;
+            --warning: #FFAA00;
+            --light: #FFFFFF;
+            --light-bg: #F8F9FF;
+            --light-gray: #F0F2F5;
+            --dark-text: #1A1A2E;
+            --gray-text: #6B7280;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --shadow-sm: 0 4px 20px rgba(108, 99, 255, 0.08);
+            --shadow-md: 0 8px 30px rgba(108, 99, 255, 0.12);
+            --shadow-lg: 0 20px 60px rgba(108, 99, 255, 0.15);
+            --shadow-glow: 0 10px 40px rgba(108, 99, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Navigation */
+        .custom-nav {
+            background: white;
+            box-shadow: var(--shadow-sm);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Main Layout */
+        .learning-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar - Modern Design */
+        .learning-sidebar {
+            width: 320px;
+            background: white;
+            border-right: 1px solid rgba(108, 99, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            background: var(--gradient);
+            color: white;
+        }
+
+        .course-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .course-progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar-bg {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 3px;
+            width: 45%;
+            transition: width 0.3s ease;
+        }
+
+        /* Test Button */
+        .test-section {
+            padding: 20px 25px;
+            border-bottom: 1px solid rgba(108, 99, 255, 0.1);
+        }
+
+        .test-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .test-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Lessons List */
+        .lessons-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .lessons-header {
+            padding: 0 25px 15px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(108, 99, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lessons-count {
+            background: var(--primary);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+
+        .lesson-item {
+            padding: 18px 25px;
+            border-bottom: 1px solid rgba(108, 99, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .lesson-item:hover {
+            background: rgba(108, 99, 255, 0.04);
+        }
+
+        .lesson-item.active {
+            background: rgba(108, 99, 255, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .lesson-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(108, 99, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-item.active .lesson-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .lesson-content {
+            flex: 1;
+        }
+
+        .lesson-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: var(--dark-text);
+            line-height: 1.4;
+        }
+
+        .lesson-item.active .lesson-title {
+            color: var(--primary-dark);
+        }
+
+        .lesson-meta {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+            display: flex;
+            gap: 15px;
+        }
+
+        .lesson-duration {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .lesson-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lesson-item.completed .lesson-status {
+            opacity: 1;
+        }
+
+        /* Main Content Area */
+        .learning-content {
+            flex: 1;
+            padding: 30px;
+            background: var(--light-bg);
+            overflow-y: auto;
+        }
+
+        /* Content Header */
+        .content-header {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(108, 99, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .current-lesson-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--dark-text);
+            margin-bottom: 8px;
+        }
+
+        .lesson-nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid rgba(108, 99, 255, 0.2);
+            color: var(--primary-dark);
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .nav-btn:disabled:hover {
+            background: white;
+            border-color: rgba(108, 99, 255, 0.2);
+            color: var(--primary-dark);
+            box-shadow: none;
+        }
+
+        /* Video Player Container */
+        .video-player-container {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(108, 99, 255, 0.1);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 500px;
+            background: #000;
+        }
+
+        .video-player .video-js {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Lesson Content */
+        .lesson-details {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(108, 99, 255, 0.1);
+        }
+
+        .content-section {
+            margin-bottom: 30px;
+        }
+
+        .content-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.3rem;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(108, 99, 255, 0.1);
+        }
+
+        .lesson-text {
+            line-height: 1.8;
+            color: var(--dark-text);
+            font-size: 1.05rem;
+        }
+
+        .lesson-text p {
+            margin-bottom: 20px;
+        }
+
+        .lesson-text ul, .lesson-text ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+
+        .lesson-text li {
+            margin-bottom: 10px;
+        }
+
+        /* Resources Section */
+        .resources-section {
+            background: rgba(108, 99, 255, 0.04);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 1px solid rgba(108, 99, 255, 0.1);
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .resource-card {
+            background: white;
+            border: 1px solid rgba(108, 99, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-sm);
+            border-color: var(--primary);
+        }
+
+        .resource-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(108, 99, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .resource-info h5 {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: var(--dark-text);
+        }
+
+        .resource-info p {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+            margin: 0;
+        }
+
+        /* Completion Action */
+        .completion-action {
+            background: var(--gradient);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .completion-action h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .completion-action p {
+            opacity: 0.9;
+            margin-bottom: 25px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mark-complete-btn {
+            background: white;
+            color: var(--primary-dark);
+            border: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .mark-complete-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-icon {
+            font-size: 6rem;
+            color: rgba(108, 99, 255, 0.1);
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .empty-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+
+        .empty-subtitle {
+            color: var(--gray-text);
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .learning-container {
+                flex-direction: column;
+            }
+            
+            .learning-sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 60vh;
+            }
+            
+            .video-player {
+                height: 400px;
+            }
+            
+            .lesson-nav-buttons {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            
+            .video-player {
+                height: 300px;
+            }
+            
+            .learning-content {
+                padding: 20px;
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar-header {
+                padding: 20px;
+            }
+            
+            .lesson-item {
+                padding: 15px 20px;
+            }
+            
+            .video-player {
+                height: 250px;
+            }
+            
+            .lesson-details {
+                padding: 20px;
+            }
+            
+            .completion-action {
+                padding: 20px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(108, 99, 255, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    {% include 'nav.html' %}
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Main Learning Container -->
+    <div class="learning-container">
+        <!-- Sidebar -->
+        <div class="learning-sidebar">
+            <!-- Sidebar Header -->
+            <div class="sidebar-header">
+                <h3 class="course-title">Course Lessons</h3>
+                <p class="mb-0 opacity-90">Continue your learning journey</p>
+                
+                <div class="course-progress">
+                    <div>
+                        <div class="progress-text">Course Progress</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                    <div class="progress-percent">45%</div>
+                </div>
+            </div>
+
+            <!-- Test Button -->
+            <div class="test-section">
+                <a href="{% url 'take_test' id=coid %}" class="test-btn">
+                    <i class="bi bi-journal-text"></i>
+                    Take Course Test
+                </a>
+                <p class="text-center text-muted small mt-2 mb-0">Complete all lessons before taking the test</p>
+            </div>
+
+            <!-- Lessons List -->
+            <div class="lessons-list">
+                <div class="lessons-header">
+                    <span>Course Modules</span>
+                    <span class="lessons-count">{{ lessons|length }} lessons</span>
+                </div>
+
+                {% if lessons %}
+                    {% for lesson in lessons %}
+                    <div class="lesson-item {% if forloop.first %}active{% endif %} {% if forloop.counter <= 3 %}completed{% endif %}"
+                         data-video="{{ lesson.video_url.url }}"
+                         data-title="{{ lesson.title }}"
+                         data-content="{{ lesson.content|safe }}"
+                         data-pdf="{% if lesson.pdf_material %}{{ lesson.pdf_material.url }}{% endif %}"
+                         data-index="{{ forloop.counter0 }}">
+                        <div class="lesson-icon">
+                            <i class="bi bi-play-circle"></i>
+                        </div>
+                        <div class="lesson-content">
+                            <div class="lesson-title">{{ lesson.title }}</div>
+                            <div class="lesson-meta">
+                                <span class="lesson-duration">
+                                    <i class="bi bi-clock"></i>
+                                    {% cycle '8:30' '12:15' '15:40' '20:10' '10:25' %} min
+                                </span>
+                                <span>
+                                    {% cycle 'Video' 'Lecture' 'Tutorial' 'Demo' 'Review' %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="lesson-status"></div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="bi bi-film"></i>
+                        </div>
+                        <h5 class="empty-title">No Lessons Available</h5>
+                        <p class="empty-subtitle">Lessons will be added soon by your instructor.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="learning-content">
+            <!-- Content Header -->
+            <div class="content-header">
+                <div>
+                    <h1 class="current-lesson-title" id="lessonTitle">
+                        {% if lessons %}{{ lessons.0.title }}{% else %}No Lesson Selected{% endif %}
+                    </h1>
+                    <p class="text-muted mb-0" id="lessonSubtitle">
+                        {% if lessons %}Select a lesson from the sidebar to begin learning{% else %}Please check back later for lessons{% endif %}
+                    </p>
+                </div>
+                
+                <div class="lesson-nav-buttons">
+                    <button class="nav-btn" id="prevLesson" title="Previous Lesson">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button class="nav-btn" id="nextLesson" title="Next Lesson">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            {% if lessons %}
+            <!-- Video Player -->
+            <div class="video-player-container">
+                <div class="video-player">
+                    <video id="mainVideo" class="video-js vjs-default-skin" controls preload="auto" playsinline>
+                        {% if lessons.0.video_url and lessons.0.video_url.url %}
+                        <source src="{{ lessons.0.video_url.url }}" type="video/mp4">
+                        {% endif %}
+                        <p class="vjs-no-js">
+                            To view this video please enable JavaScript, and consider upgrading to a
+                            web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                        </p>
+                    </video>
+                </div>
+            </div>
+
+            <!-- Lesson Details -->
+            <div class="lesson-details">
+                <div class="content-section">
+                    <h3 class="section-title">Lesson Content</h3>
+                    <div class="lesson-text" id="lessonContent">
+                        {{ lessons.0.content|safe }}
+                    </div>
+                </div>
+
+                <!-- Resources Section - Fixed with proper condition -->
+                {% with first_lesson=lessons.0 %}
+                    {% if first_lesson.pdf_material %}
+                    <div class="resources-section" id="resourcesSection">
+                        <h3 class="section-title">Learning Resources</h3>
+                        <div class="resources-grid">
+                            <a href="{{ first_lesson.pdf_material.url }}" class="resource-card" id="pdfResource" target="_blank" download>
+                                <div class="resource-icon">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <h5>Lesson Notes (PDF)</h5>
+                                    <p>Download comprehensive notes</p>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="resource-card">
+                                <div class="resource-icon">
+                                    <i class="bi bi-code-square"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <h5>Code Examples</h5>
+                                    <p>Practice files and snippets</p>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="resource-card">
+                                <div class="resource-icon">
+                                    <i class="bi bi-question-circle"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <h5>Q&A Forum</h5>
+                                    <p>Ask questions & get answers</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Completion Action -->
+            <div class="completion-action">
+                <h4>Complete This Lesson</h4>
+                <p>Mark this lesson as complete to track your progress and unlock the next lesson in the course.</p>
+                <button class="mark-complete-btn" id="markCompleteBtn">
+                    <i class="bi bi-check-circle"></i>
+                    Mark as Complete
+                </button>
+            </div>
+            {% else %}
+            <!-- Empty Content State -->
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="bi bi-film"></i>
+                </div>
+                <h3 class="empty-title">No Lessons Available</h3>
+                <p class="empty-subtitle">
+                    The course lessons are currently being prepared by your instructor. 
+                    Please check back soon to start your learning journey.
+                </p>
+                <a href="/" class="test-btn" style="width: auto; display: inline-flex; padding: 12px 30px;">
+                    <i class="bi bi-arrow-left me-2"></i> Back to Courses
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Video.js Library -->
+    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if there are lessons
+            const lessonItems = document.querySelectorAll('.lesson-item');
+            
+            if (lessonItems.length === 0) {
+                // No lessons available, hide video player and completion action
+                document.querySelector('.video-player-container').style.display = 'none';
+                document.querySelector('.completion-action').style.display = 'none';
+                return;
+            }
+
+            // Initialize Video.js player
+            const player = videojs('mainVideo', {
+                controls: true,
+                autoplay: false,
+                preload: 'auto',
+                responsive: true,
+                fluid: true,
+                playbackRates: [0.5, 1, 1.5, 2],
+                controlBar: {
+                    remainingTimeDisplay: true,
+                    pictureInPictureToggle: true,
+                    volumePanel: {
+                        inline: false
+                    }
+                }
+            });
+
+            // Get DOM elements
+            const lessonTitle = document.getElementById('lessonTitle');
+            const lessonContent = document.getElementById('lessonContent');
+            const resourcesSection = document.getElementById('resourcesSection');
+            const pdfResource = document.getElementById('pdfResource');
+            const prevBtn = document.getElementById('prevLesson');
+            const nextBtn = document.getElementById('nextLesson');
+            const markCompleteBtn = document.getElementById('markCompleteBtn');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            let currentLessonIndex = 0;
+
+            // Function to show loading
+            function showLoading() {
+                loadingOverlay.classList.add('active');
+            }
+
+            // Function to hide loading
+            function hideLoading() {
+                loadingOverlay.classList.remove('active');
+            }
+
+            // Function to check if PDF exists for a lesson
+            function hasPDF(lessonItem) {
+                return lessonItem.dataset.pdf && lessonItem.dataset.pdf.trim() !== '';
+            }
+
+            // Function to load a lesson
+            function loadLesson(lessonItem) {
+                showLoading();
+                
+                const videoUrl = lessonItem.dataset.video || "";
+                const title = lessonItem.dataset.title || "Untitled Lesson";
+                const content = lessonItem.dataset.content || "<p>No content available for this lesson.</p>";
+                currentLessonIndex = parseInt(lessonItem.dataset.index);
+
+                // Update UI
+                setTimeout(() => {
+                    // Update video if URL exists
+                    if (videoUrl) {
+                        player.src({ type: 'video/mp4', src: videoUrl });
+                        player.poster(''); // Clear any existing poster
+                    } else {
+                        // Hide video player if no video
+                        document.querySelector('.video-player-container').style.display = 'none';
+                    }
+
+                    // Update title and content
+                    lessonTitle.textContent = title;
+                    lessonContent.innerHTML = content;
+
+                    // Update resources section
+                    if (hasPDF(lessonItem)) {
+                        if (resourcesSection) {
+                            resourcesSection.style.display = 'block';
+                            if (pdfResource) {
+                                pdfResource.href = lessonItem.dataset.pdf;
+                            }
+                        }
+                    } else {
+                        if (resourcesSection) {
+                            resourcesSection.style.display = 'none';
+                        }
+                    }
+
+                    // Update active state
+                    lessonItems.forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    lessonItem.classList.add('active');
+
+                    // Update navigation buttons
+                    updateNavButtons();
+
+                    // Scroll to top of content
+                    document.querySelector('.learning-content').scrollTop = 0;
+
+                    hideLoading();
+                }, 500);
+            }
+
+            // Function to update navigation buttons state
+            function updateNavButtons() {
+                if (prevBtn && nextBtn) {
+                    prevBtn.disabled = currentLessonIndex <= 0;
+                    nextBtn.disabled = currentLessonIndex >= lessonItems.length - 1;
+                }
+            }
+
+            // Click handler for lesson items
+            lessonItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    loadLesson(this);
+                });
+            });
+
+            // Navigation buttons
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    if (currentLessonIndex > 0) {
+                        loadLesson(lessonItems[currentLessonIndex - 1]);
+                    }
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    if (currentLessonIndex < lessonItems.length - 1) {
+                        loadLesson(lessonItems[currentLessonIndex + 1]);
+                    }
+                });
+            }
+
+            // Mark as complete button
+            if (markCompleteBtn) {
+                markCompleteBtn.addEventListener('click', function() {
+                    const currentItem = lessonItems[currentLessonIndex];
+                    
+                    if (!currentItem.classList.contains('completed')) {
+                        // Add completed class
+                        currentItem.classList.add('completed');
+                        
+                        // Update progress
+                        const completedLessons = document.querySelectorAll('.lesson-item.completed').length;
+                        const totalLessons = lessonItems.length;
+                        const progressPercent = Math.round((completedLessons / totalLessons) * 100);
+                        
+                        document.querySelector('.progress-fill').style.width = `${progressPercent}%`;
+                        document.querySelector('.progress-percent').textContent = `${progressPercent}%`;
+                        
+                        // Show success message
+                        const originalText = markCompleteBtn.innerHTML;
+                        markCompleteBtn.innerHTML = '<i class="bi bi-check2-circle"></i> Lesson Completed!';
+                        markCompleteBtn.style.background = '#00D68F';
+                        
+                        setTimeout(() => {
+                            markCompleteBtn.innerHTML = originalText;
+                            markCompleteBtn.style.background = '';
+                            
+                            // Auto-advance to next lesson if available
+                            if (currentLessonIndex < lessonItems.length - 1) {
+                                setTimeout(() => {
+                                    loadLesson(lessonItems[currentLessonIndex + 1]);
+                                }, 1000);
+                            }
+                        }, 2000);
+                    }
+                });
+            }
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft' && prevBtn && !prevBtn.disabled) {
+                    prevBtn.click();
+                } else if (e.key === 'ArrowRight' && nextBtn && !nextBtn.disabled) {
+                    nextBtn.click();
+                } else if ((e.key === ' ' || e.key === 'Spacebar') && player) {
+                    // Spacebar to play/pause video
+                    if (player.paused()) {
+                        player.play();
+                    } else {
+                        player.pause();
+                    }
+                    e.preventDefault();
+                }
+            });
+
+            // Track video progress for completion
+            if (player) {
+                player.on('timeupdate', function() {
+                    const currentTime = player.currentTime();
+                    const duration = player.duration();
+                    
+                    if (duration > 0 && currentTime / duration > 0.9) {
+                        // User watched 90% of the video
+                        if (markCompleteBtn) {
+                            markCompleteBtn.style.opacity = '1';
+                        }
+                    }
+                });
+            }
+
+            // Initialize first lesson if available
+            if (lessonItems.length > 0) {
+                loadLesson(lessonItems[0]);
+            }
+
+            // Update progress bar on load
+            const completedLessons = document.querySelectorAll('.lesson-item.completed').length;
+            const totalLessons = lessonItems.length;
+            if (totalLessons > 0) {
+                const progressPercent = Math.round((completedLessons / totalLessons) * 100);
+                document.querySelector('.progress-fill').style.width = `${progressPercent}%`;
+                document.querySelector('.progress-percent').textContent = `${progressPercent}%`;
+            }
+        });
+    </script>
+</body>
+</html>

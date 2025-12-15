@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Course Marketplace | SkillHub Pro</title>
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-light: #8B85FF;
+            --primary-dark: #554FD8;
+            --secondary: #36D1DC;
+            --accent: #FF6584;
+            --success: #00D68F;
+            --warning: #FFAA00;
+            --light: #FFFFFF;
+            --light-bg: #F8F9FF;
+            --light-gray: #F0F2F5;
+            --dark-text: #1A1A2E;
+            --gray-text: #6B7280;
+            --light-text: #8A8AA3;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-light: linear-gradient(135deg, var(--primary-light) 0%, #82E6FF 100%);
+            --gradient-white: linear-gradient(135deg, #FFFFFF 0%, #F8F9FF 100%);
+            --shadow-sm: 0 4px 20px rgba(108, 99, 255, 0.08);
+            --shadow-md: 0 8px 30px rgba(108, 99, 255, 0.12);
+            --shadow-lg: 0 20px 60px rgba(108, 99, 255, 0.15);
+            --shadow-glow: 0 10px 40px rgba(108, 99, 255, 0.2);
+            --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Animated Background - Light Version */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.05;
+            background: 
+                radial-gradient(circle at 20% 80%, var(--primary-light) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, var(--secondary) 0%, transparent 40%),
+                radial-gradient(circle at 40% 40%, var(--accent) 0%, transparent 30%);
+            animation: pulse 20s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.03; transform: scale(1); }
+            50% { opacity: 0.08; transform: scale(1.02); }
+        }
+
+        /* Header Section - Light Theme */
+        .marketplace-header {
+            background: var(--gradient-white);
+            padding: 80px 0 60px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(108, 99, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(108, 99, 255, 0.05);
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(108, 99, 255, 0.1);
+            border-radius: 50%;
+            animation: float 25s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 20%;
+            right: 10%;
+            animation-delay: -7s;
+        }
+        .shape:nth-child(3) {
+            width: 70px;
+            height: 70px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-badge {
+            background: rgba(108, 99, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(108, 99, 255, 0.2);
+            color: var(--primary-dark);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .main-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 3.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--gray-text);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        /* Search & Filter Panel - Light Theme */
+        .control-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(108, 99, 255, 0.1);
+            border-radius: 24px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: var(--shadow-card);
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 1.2rem;
+            z-index: 2;
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(108, 99, 255, 0.1);
+            color: var(--dark-text);
+            padding: 15px 20px 15px 55px;
+            border-radius: 16px;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .search-input:focus {
+            background: white;
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--light-text);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-tab {
+            background: rgba(108, 99, 255, 0.08);
+            border: 1px solid rgba(108, 99, 255, 0.1);
+            color: var(--primary-dark);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab:hover, .filter-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Course Cards - Modern Grid - Light Theme */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .course-card-modern {
+            background: white;
+            border: 1px solid rgba(108, 99, 255, 0.1);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            animation: fadeInUp 0.6s ease;
+            box-shadow: var(--shadow-card);
+        }
+
+        .course-card-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .course-card-modern:hover {
+            transform: translateY(-15px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .course-card-modern:hover::before {
+            transform: scaleX(1);
+        }
+
+        .course-image-wrapper {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .course-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .course-card-modern:hover .course-image {
+            transform: scale(1.1);
+        }
+
+        .course-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--gradient);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-glow);
+            z-index: 2;
+        }
+
+        .course-level {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--primary-dark);
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-content {
+            padding: 25px;
+        }
+
+        .course-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--dark-text);
+            margin-bottom: 10px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .course-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .instructor {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray-text);
+            font-size: 0.9rem;
+        }
+
+        .instructor i {
+            color: var(--primary);
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--warning);
+            font-size: 0.9rem;
+        }
+
+        .course-description {
+            color: var(--gray-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .course-features {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--light-text);
+            font-size: 0.85rem;
+        }
+
+        .feature i {
+            color: var(--secondary);
+        }
+
+        .course-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-enroll {
+            flex: 2;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-enroll:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-preview {
+            flex: 1;
+            background: rgba(108, 99, 255, 0.08);
+            border: 1px solid rgba(108, 99, 255, 0.2);
+            color: var(--primary-dark);
+            padding: 12px;
+            border-radius: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-preview:hover {
+            background: rgba(108, 99, 255, 0.12);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Panel - Light Theme */
+        .stats-panel {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(108, 99, 255, 0.1);
+            box-shadow: var(--shadow-card);
+        }
+
+        .stats-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%236C63FF' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 3rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--gray-text);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Empty State - Light Theme */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-icon {
+            font-size: 6rem;
+            color: rgba(108, 99, 255, 0.1);
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .empty-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+
+        .empty-subtitle {
+            color: var(--gray-text);
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        /* Footer - Light Theme */
+        .marketplace-footer {
+            text-align: center;
+            padding: 60px 0 40px;
+            border-top: 1px solid rgba(108, 99, 255, 0.1);
+            margin-top: 80px;
+            background: white;
+        }
+
+        .footer-logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-link {
+            color: var(--gray-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Modal - Light Theme */
+        .course-modal .modal-content {
+            background: white;
+            border: 1px solid rgba(108, 99, 255, 0.1);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            background: var(--gradient);
+            border: none;
+            padding: 30px;
+        }
+
+        .modal-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .main-title {
+                font-size: 2.8rem;
+            }
+            
+            .courses-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .control-panel {
+                padding: 20px;
+            }
+            
+            .filter-tabs {
+                justify-content: flex-start;
+            }
+            
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .marketplace-header {
+                padding: 60px 0 40px;
+            }
+            
+            .main-title {
+                font-size: 1.8rem;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Active Filters Display */
+        .active-filters {
+            background: rgba(108, 99, 255, 0.08);
+            border: 1px solid rgba(108, 99, 255, 0.2);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Select Styling */
+        .form-select {
+            border: 2px solid rgba(108, 99, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            color: var(--dark-text);
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+        }
+
+        .form-select.filter-select {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Button Styling */
+        .btn-outline-light {
+            border: 2px solid rgba(108, 99, 255, 0.2);
+            color: var(--primary-dark);
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-light:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Dropdown Styling */
+        .dropdown-menu {
+            border: 1px solid rgba(108, 99, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            padding: 10px;
+        }
+
+        .dropdown-item {
+            border-radius: 8px;
+            padding: 8px 15px;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(108, 99, 255, 0.1);
+            color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    {% include "nav.html" %}
+    
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Header Section -->
+    <header class="marketplace-header">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        
+        <div class="container">
+            <div class="header-content text-center">
+                <div class="header-badge animate__animated animate__fadeIn">
+                    <i class="bi bi-stars me-2"></i> Premium Learning Platform
+                </div>
+                
+                <h1 class="main-title animate__animated animate__fadeInUp">
+                    Master New Skills with <br>Expert-Led Courses
+                </h1>
+                
+                <p class="subtitle animate__animated animate__fadeInUp">
+                    Discover cutting-edge courses taught by industry professionals. 
+                    Start your learning journey today and transform your career.
+                </p>
+                
+                <!-- Control Panel -->
+                <div class="control-panel">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-lg-8">
+                            <div class="search-wrapper">
+                                <i class="bi bi-search search-icon"></i>
+                                <input type="text" 
+                                       class="search-input" 
+                                       id="searchBox" 
+                                       placeholder="Search courses, technologies, or instructors..."
+                                       oninput="filterCourses()">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <select id="sortSelect" class="form-select filter-select" onchange="sortCourses()">
+                                    <option value="">Sort by</option>
+                                    <option value="price_low">Price: Low to High</option>
+                                    <option value="price_high">Price: High to Low</option>
+                                    <option value="popular">Most Popular</option>
+                                    <option value="newest">Newest First</option>
+                                </select>
+                                
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-light btn-sm ms-3" type="button" 
+                                            data-bs-toggle="dropdown" aria-expanded="false"
+                                            style="border-radius: 12px; padding: 10px 20px;">
+                                        <i class="bi bi-funnel me-2"></i> Filters
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="#" onclick="filterByLevel('all')">All Levels</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="filterByLevel('beginner')">Beginner</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="filterByLevel('intermediate')">Intermediate</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="filterByLevel('advanced')">Advanced</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Filter Tabs -->
+                    <div class="filter-tabs mt-4">
+                        <div class="filter-tab active" onclick="filterByCategory('all')">All Courses</div>
+                        <div class="filter-tab" onclick="filterByCategory('development')">Development</div>
+                        <div class="filter-tab" onclick="filterByCategory('design')">Design</div>
+                        <div class="filter-tab" onclick="filterByCategory('business')">Business</div>
+                        <div class="filter-tab" onclick="filterByCategory('data')">Data Science</div>
+                        <div class="filter-tab" onclick="filterByCategory('marketing')">Marketing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalCourses">{{ course|length }}</div>
+                        <div class="stat-label">Premium Courses</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number" id="activeStudents">15,842</div>
+                        <div class="stat-label">Active Students</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">98.7%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Expert Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Courses Grid -->
+        <div class="courses-grid" id="coursesGrid">
+            {% for i in course %}
+            <div class="course-card-modern course-item animate__animated"
+                 data-title="{{ i.title|lower }}"
+                 data-instructor="{{ i.instructor|lower }}"
+                 data-price="{{ i.price }}"
+                 data-description="{{ i.description|lower }}"
+                 data-level="{% cycle 'beginner' 'intermediate' 'advanced' %}"
+                 data-category="{% cycle 'development' 'design' 'business' 'data' 'marketing' %}"
+                 data-rating="{% cycle '4.8' '4.5' '4.9' '4.7' %}">
+                
+                <!-- Course Image -->
+                <div class="course-image-wrapper">
+                    {% if i.image %}
+                        <img src="{{ i.image.url }}" alt="{{ i.title }}" class="course-image">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="Course Image" class="course-image">
+                    {% endif %}
+                    <div class="course-badge">₹{{ i.price|floatformat:0 }}</div>
+                    <div class="course-level">
+                        {% cycle 'Beginner' 'Intermediate' 'Advanced' %}
+                    </div>
+                </div>
+
+                <!-- Course Content -->
+                <div class="course-content">
+                    <h3 class="course-title">{{ i.title }}</h3>
+                    
+                    <div class="course-meta">
+                        <div class="instructor">
+                            <i class="bi bi-person"></i>
+                            <span>{{ i.instructor }}</span>
+                        </div>
+                        <div class="rating">
+                            <i class="bi bi-star-fill"></i>
+                            <span>{% cycle '4.8' '4.5' '4.9' '4.7' %}</span>
+                        </div>
+                    </div>
+                    
+                    <p class="course-description">
+                        {{ i.description|truncatechars:150 }}
+                    </p>
+                    
+                    <div class="course-features">
+                        <div class="feature">
+                            <i class="bi bi-clock"></i>
+                            <span>{% cycle '8' '12' '15' '20' %}h</span>
+                        </div>
+                        <div class="feature">
+                            <i class="bi bi-collection-play"></i>
+                            <span>{% cycle '42' '35' '50' '28' %} Lessons</span>
+                        </div>
+                        <div class="feature">
+                            <i class="bi bi-people"></i>
+                            <span>{% cycle '1.2k' '850' '2.3k' '1.5k' %} Students</span>
+                        </div>
+                    </div>
+
+                    <div class="course-actions">
+                        <form action="{% url 'create-checkout-session' i.id %}" method="POST" class="w-100">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-enroll w-100">
+                                <i class="bi bi-cart-plus"></i> Enroll Now
+                            </button>
+                        </form>
+                        
+                        <button class="btn-preview" onclick="showPreview()">
+                            <i class="bi bi-play-circle"></i> Preview
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <!-- Empty State -->
+            <div class="col-12">
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-journals"></i>
+                    </div>
+                    <h3 class="empty-title">No Courses Available</h3>
+                    <p class="empty-subtitle">
+                        We're currently updating our course catalog. 
+                        Check back soon for exciting new learning opportunities!
+                    </p>
+                    <button class="btn-enroll" onclick="location.reload()">
+                        <i class="bi bi-arrow-clockwise me-2"></i> Refresh Page
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Active Filters Display -->
+        <div class="active-filters mt-4 mb-5 text-center" id="activeFilters" style="display: none;">
+            <div class="d-inline-flex align-items-center gap-2 bg-white p-3 rounded-pill border border-primary">
+                <span class="text-primary fw-semibold">Active filters:</span>
+                <span class="badge bg-primary" id="filterBadge"></span>
+                <button class="btn btn-sm btn-outline-primary ms-2" onclick="clearFilters()">
+                    <i class="bi bi-x-lg"></i> Clear All
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="marketplace-footer">
+        <div class="container">
+            <div class="footer-logo">SkillHub Pro</div>
+            
+            <div class="footer-links">
+                <a href="#" class="footer-link">About Us</a>
+                <a href="#" class="footer-link">Careers</a>
+                <a href="#" class="footer-link">Blog</a>
+                <a href="#" class="footer-link">Help Center</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+            
+            <p class="text-muted small mb-0">
+                © 2024 SkillHub Pro Learning Platform. All rights reserved.<br>
+                Empowering learners worldwide through quality education.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Course Preview Modal -->
+    <div class="modal fade course-modal" id="previewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Course Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9 mb-4">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                                title="Course Preview" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p class="text-center text-muted">
+                        Watch this preview to get a feel for the course content and teaching style.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        // Enhanced Course Filtering
+        let activeFilters = {
+            search: '',
+            category: 'all',
+            level: 'all',
+            sort: ''
+        };
+
+        function filterCourses() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase().trim();
+            activeFilters.search = searchTerm;
+            applyFilters();
+        }
+
+        function filterByCategory(category) {
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            activeFilters.category = category;
+            applyFilters();
+        }
+
+        function filterByLevel(level) {
+            activeFilters.level = level;
+            applyFilters();
+        }
+
+        function sortCourses() {
+            const sortValue = document.getElementById('sortSelect').value;
+            activeFilters.sort = sortValue;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const courseItems = document.querySelectorAll('.course-item');
+            let visibleCount = 0;
+            
+            courseItems.forEach(item => {
+                const title = item.dataset.title || '';
+                const instructor = item.dataset.instructor || '';
+                const description = item.dataset.description || '';
+                const category = item.dataset.category || '';
+                const level = item.dataset.level || '';
+                const matchesSearch = !activeFilters.search || 
+                    title.includes(activeFilters.search) || 
+                    instructor.includes(activeFilters.search) ||
+                    description.includes(activeFilters.search);
+                const matchesCategory = activeFilters.category === 'all' || category === activeFilters.category;
+                const matchesLevel = activeFilters.level === 'all' || level === activeFilters.level;
+                
+                if (matchesSearch && matchesCategory && matchesLevel) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                    
+                    // Add animation
+                    item.classList.remove('animate__fadeIn');
+                    void item.offsetWidth; // Trigger reflow
+                    item.classList.add('animate__fadeIn');
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Apply sorting if needed
+            if (activeFilters.sort) {
+                sortVisibleCourses();
+            }
+            
+            // Update counts and filter display
+            updateDisplay(visibleCount);
+        }
+
+        function sortVisibleCourses() {
+            const container = document.getElementById('coursesGrid');
+            const items = Array.from(container.querySelectorAll('.course-item[style*="block"]'));
+            
+            items.sort((a, b) => {
+                switch(activeFilters.sort) {
+                    case 'price_low':
+                        return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+                    case 'price_high':
+                        return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+                    case 'popular':
+                        return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
+                    case 'newest':
+                        // Assuming newer courses come first in the list
+                        return Array.from(container.children).indexOf(a) - Array.from(container.children).indexOf(b);
+                    default:
+                        return 0;
+                }
+            });
+            
+            // Reorder in DOM
+            items.forEach(item => container.appendChild(item));
+        }
+
+        function updateDisplay(visibleCount) {
+            // Update course count
+            const countBadge = document.getElementById('totalCourses');
+            if (countBadge) {
+                countBadge.textContent = visibleCount;
+            }
+            
+            // Show/hide active filters
+            const activeFiltersDiv = document.getElementById('activeFilters');
+            const filterBadge = document.getElementById('filterBadge');
+            
+            const filterCount = Object.values(activeFilters).filter(f => f && f !== 'all').length;
+            
+            if (filterCount > 0) {
+                activeFiltersDiv.style.display = 'block';
+                filterBadge.textContent = `${filterCount} active filter${filterCount > 1 ? 's' : ''}`;
+            } else {
+                activeFiltersDiv.style.display = 'none';
+            }
+            
+            // Show empty state if no courses
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) {
+                if (visibleCount === 0) {
+                    emptyState.style.display = 'block';
+                } else {
+                    emptyState.style.display = 'none';
+                }
+            }
+        }
+
+        function clearFilters() {
+            // Reset all filters
+            document.getElementById('searchBox').value = '';
+            document.getElementById('sortSelect').value = '';
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelector('.filter-tab[onclick*="all"]').classList.add('active');
+            
+            activeFilters = {
+                search: '',
+                category: 'all',
+                level: 'all',
+                sort: ''
+            };
+            
+            applyFilters();
+        }
+
+        function showPreview(courseIndex) {
+            // In a real app, this would load the actual course preview
+            const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+            previewModal.show();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial counts
+            const totalCourses = document.querySelectorAll('.course-item').length;
+            document.getElementById('totalCourses').textContent = totalCourses;
+            
+            // Add hover effects
+            document.querySelectorAll('.course-card-modern').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-15px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Apply initial filters
+            applyFilters();
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchBox').focus();
+            }
+            if (e.key === 'Escape') {
+                clearFilters();
+            }
+        });
+    </script>
+</body>
+</html>

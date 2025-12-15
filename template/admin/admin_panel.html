@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+{% extends './admin_sidebar.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduBridge | Dashboard</title>
+     
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --dark-color: #1e1e2d;
+            --light-color: #f8f9fa;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --gray-color: #6c757d;
+            --border-radius: 10px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7fb;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            transition: var(--transition);
+        }
+        
+        /* Topbar */
+        .topbar {
+            height: 70px;
+            background: white;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .topbar-left h3 {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+        
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .search-bar {
+            position: relative;
+        }
+        
+        .search-bar input {
+            padding: 10px 15px 10px 40px;
+            border-radius: 50px;
+            border: 1px solid #e0e0e0;
+            width: 250px;
+            transition: var(--transition);
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-color);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Stats Cards */
+        .stats-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-left: 5px solid var(--primary-color);
+            height: 100%;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stats-card.blue {
+            border-left-color: var(--primary-color);
+        }
+        
+        .stats-card.green {
+            border-left-color: var(--success-color);
+        }
+        
+        .stats-card.orange {
+            border-left-color: var(--warning-color);
+        }
+        
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .stats-card.blue .stats-icon {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .stats-card.green .stats-icon {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--success-color);
+        }
+        
+        .stats-card.orange .stats-icon {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .stats-card h6 {
+            color: var(--gray-color);
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        
+        .stats-card h3 {
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        .stats-card .trend {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .stats-card .trend.up {
+            color: var(--success-color);
+        }
+        
+        .stats-card .trend.down {
+            color: var(--danger-color);
+        }
+        
+        /* Table Styling */
+        .table-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .table-header h5 {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+        
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .table thead th {
+            border: none;
+            background-color: #f8f9fa;
+            color: var(--gray-color);
+            font-weight: 600;
+            padding: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .table tbody tr {
+            transition: var(--transition);
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .table tbody td {
+            padding: 15px;
+            border-bottom: 1px solid #f1f1f1;
+            vertical-align: middle;
+        }
+        
+        .badge-course {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .topbar-left h3 {
+                font-size: 1.2rem;
+            }
+            
+            .search-bar input {
+                width: 180px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-bar input {
+                width: 150px;
+            }
+            
+            .stats-card {
+                margin-bottom: 20px;
+            }
+        }
+        
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--dark-color);
+            cursor: pointer;
+        }
+        
+        @media (max-width: 992px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    
+
+    <!-- Main Content -->
+    <!-- <div class="main-content"> -->
+        <!-- Top Navbar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h3>Dashboard Overview</h3>
+            </div>
+            
+            <div class="topbar-right">
+                <div class="search-bar">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                
+                <div class="notifications">
+                    <button class="btn btn-light position-relative">
+                        <i class="bi bi-bell"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            3
+                        </span>
+                    </button>
+                </div>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        A
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Admin</h6>
+                        <small class="text-muted">Super Admin</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="container-fluid">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="stats-card blue">
+                        <div class="stats-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h6>Total Students</h6>
+                        <h3>1,248</h3>
+                        <div class="trend up">
+                            <i class="bi bi-arrow-up-right"></i>
+                            <span>12% increase from last month</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="stats-card green">
+                        <div class="stats-icon">
+                            <i class="bi bi-journals"></i>
+                        </div>
+                        <h6>Total Courses</h6>
+                        <h3>24</h3>
+                        <div class="trend up">
+                            <i class="bi bi-arrow-up-right"></i>
+                            <span>3 new courses added</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="stats-card orange">
+                        <div class="stats-icon">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <h6>Total Earnings</h6>
+                        <h3>$12,580</h3>
+                        <div class="trend up">
+                            <i class="bi bi-arrow-up-right"></i>
+                            <span>18% increase from last month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Student Registrations -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h5>Recent Student Registrations</h5>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Course</th>
+                                <th>Enrollment Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar me-3" style="width: 35px; height: 35px; font-size: 14px;">
+                                            RS
+                                        </div>
+                                        <div>
+                                            <strong>Rohit Sharma</strong>
+                                            <div class="text-muted small">+91 98765 43210</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>rohit@gmail.com</td>
+                                <td><span class="badge-course">Python Course</span></td>
+                                <td>2025-01-01</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar me-3" style="width: 35px; height: 35px; font-size: 14px; background: linear-gradient(135deg, #ff6b6b, #ff8e53);">
+                                            PV
+                                        </div>
+                                        <div>
+                                            <strong>Priya Verma</strong>
+                                            <div class="text-muted small">+91 98765 43211</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>priya@gmail.com</td>
+                                <td><span class="badge-course">Java Course</span></td>
+                                <td>2025-01-02</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar me-3" style="width: 35px; height: 35px; font-size: 14px; background: linear-gradient(135deg, #4ecdc4, #44a08d);">
+                                            AS
+                                        </div>
+                                        <div>
+                                            <strong>Aarav Singh</strong>
+                                            <div class="text-muted small">+91 98765 43212</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>aarav@gmail.com</td>
+                                <td><span class="badge-course">Web Development</span></td>
+                                <td>2025-01-03</td>
+                                <td><span class="badge bg-warning">Pending</span></td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar me-3" style="width: 35px; height: 35px; font-size: 14px; background: linear-gradient(135deg, #9d50bb, #6e48aa);">
+                                            NM
+                                        </div>
+                                        <div>
+                                            <strong>Neha Mehta</strong>
+                                            <div class="text-muted small">+91 98765 43213</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>neha@gmail.com</td>
+                                <td><span class="badge-course">Data Science</span></td>
+                                <td>2025-01-04</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="text-muted small">Showing 4 of 1,248 students</div>
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        
+        // Add hover effect to table rows
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+    {% endblock %}
+</body>
+</html>

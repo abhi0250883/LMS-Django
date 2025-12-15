@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Learning Dashboard | Purchased Courses</title>
+    
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --success-color: #2ecc71;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fb 0%, #f0f4ff 100%);
+            font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        /* Custom Navbar Styling */
+        .custom-navbar {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+        
+        .container-fluid {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        
+        /* Header Section */
+        .page-header {
+            padding: 2.5rem 0 1.5rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 2.5rem;
+        }
+        
+        .page-title {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+        
+        .stats-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Course Cards */
+        .course-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            border: none;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            margin-bottom: 2rem;
+            height: 100%;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--card-hover-shadow);
+        }
+        
+        .course-img-container {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .course-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .course-card:hover .course-img {
+            transform: scale(1.05);
+        }
+        
+        .course-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            font-weight: 700;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        .free-badge {
+            background: var(--success-color);
+        }
+        
+        .progress-indicator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--accent-color), var(--primary-color));
+            border-radius: 0 3px 3px 0;
+            width: 65%;
+        }
+        
+        .card-body {
+            padding: 1.8rem;
+        }
+        
+        .course-title {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: #222;
+            line-height: 1.4;
+        }
+        
+        .course-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .lesson-count {
+            display: flex;
+            align-items: center;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .lesson-count i {
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
+        
+        .completion-status {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 10px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border: none;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 10px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+        }
+        
+        .pdf-download {
+            background: #fff5f5;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #ff6b6b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pdf-info h6 {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            color: #333;
+        }
+        
+        .pdf-info p {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 0;
+        }
+        
+        .pdf-download-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .pdf-download-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            margin: 2rem 0;
+        }
+        
+        .empty-icon {
+            font-size: 5rem;
+            color: #e0e0e0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-state h3 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #444;
+        }
+        
+        .empty-state p {
+            color: #777;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .browse-btn {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .browse-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+            color: white;
+        }
+        
+        /* Filter & Sort */
+        .filter-container {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .filter-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .filter-btn {
+            background: #f0f4ff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 500;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #777;
+            margin-top: 3rem;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container-fluid {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-img-container {
+                height: 200px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .page-header {
+                border-radius: 0 0 20px 20px;
+            }
+            
+            .course-card {
+                margin-bottom: 1.5rem;
+            }
+            
+            .pdf-download {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include "nav.html" %}
+
+
+    <!-- Header Section -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title">My Learning Dashboard</h1>
+            <p class="page-subtitle">Continue your learning journey with all the courses you've purchased. Track progress, access materials, and dive into lessons.</p>
+            
+            <div class="stats-card">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h3 class="fw-bold">{{ purchased_courses|length }}</h3>
+                        <p class="mb-0">Courses Enrolled</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="fw-bold">12</h3>
+                        <p class="mb-0">Lessons Completed</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="fw-bold">35%</h3>
+                        <p class="mb-0">Overall Progress</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Filter & Sort Section -->
+        <div class="filter-container">
+            <h5 class="filter-title">Filter Courses</h5>
+            <div class="filter-options">
+                <button class="filter-btn active">All Courses</button>
+                <button class="filter-btn">In Progress</button>
+                <button class="filter-btn">Completed</button>
+                <button class="filter-btn">Recently Added</button>
+                <button class="filter-btn">Free Courses</button>
+            </div>
+        </div>
+
+        <!-- Courses Grid -->
+        {% if purchased_courses %}
+        <div class="row">
+            {% for i in purchased_courses %}
+            <div class="col-lg-4 col-md-6">
+                <div class="course-card">
+                    <div class="course-img-container">
+                        <img src="{{ i.image.url }}" class="course-img" alt="{{ i.title }}">
+                        <div class="course-badge {% if i.price == 0 %}free-badge{% endif %}">
+                            {% if i.price == 0 %}
+                                Free
+                            {% else %}
+                                ₹{{ i.price }}
+                            {% endif %}
+                        </div>
+                        <div class="progress-indicator">
+                            <div class="progress-bar"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <h5 class="course-title">{{ i.title }}</h5>
+                        <p class="course-description">
+                            {{ i.description|truncatechars:140 }}
+                        </p>
+                        
+                        {% if i.pdf_material %}
+                        <div class="pdf-download">
+                            <div class="pdf-info">
+                                <h6><i class="fas fa-file-pdf me-2"></i>Course Notes</h6>
+                                <p>PDF Material Available</p>
+                            </div>
+                            <a href="{{ i.pdf_material.url }}" class="pdf-download-btn" download>
+                                <i class="fas fa-download me-1"></i> Download
+                            </a>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="course-meta">
+                            <div class="lesson-count">
+                                <i class="fas fa-play-circle"></i>
+                                <span>12 Lessons</span>
+                            </div>
+                            <div class="completion-status">
+                                <i class="fas fa-chart-line me-1"></i> 65% Complete
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <a href="{% url 'viewcourse' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-external-link-alt me-2"></i> Course Page
+                            </a>
+                            <a href="{% url 'view-lesson' id=i.id %}" class="btn btn-primary">
+                                <i class="fas fa-play-circle me-2"></i> Continue
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <h3>No courses purchased yet</h3>
+            <p>It looks like you haven't enrolled in any courses yet. Start your learning journey by exploring our catalog of courses designed to help you grow your skills.</p>
+            <a href="" class="browse-btn">
+                <i class="fas fa-search me-2"></i> Browse Courses
+            </a>
+        </div>
+        {% endif %}
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2023 LearnHub. All rights reserved. | <a href="#" class="text-decoration-none" style="color: var(--primary-color);">Help Center</a> | <a href="#" class="text-decoration-none" style="color: var(--primary-color);">Contact Support</a></p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS for interactions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter buttons functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Course card hover enhancement
+            const courseCards = document.querySelectorAll('.course-card');
+            courseCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.zIndex = '10';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.zIndex = '1';
+                });
+            });
+            
+            // Animate progress bars on scroll
+            function animateProgressBars() {
+                const progressBars = document.querySelectorAll('.progress-bar');
+                progressBars.forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0';
+                    
+                    setTimeout(() => {
+                        bar.style.transition = 'width 1.5s ease-in-out';
+                        bar.style.width = width;
+                    }, 300);
+                });
+            }
+            
+            // Trigger animation when page loads
+            setTimeout(animateProgressBars, 500);
+        });
+    </script>
+</body>
+</html>

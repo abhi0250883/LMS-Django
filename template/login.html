@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal | Login</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            --input-shadow: 0 4px 10px rgba(67, 97, 238, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7ff 0%, #eef1ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background decorative elements */
+        .bg-shape-1 {
+            position: absolute;
+            top: -10%;
+            right: -5%;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(58, 12, 163, 0.05) 100%);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            z-index: -1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .bg-shape-2 {
+            position: absolute;
+            bottom: -10%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.1) 0%, rgba(67, 97, 238, 0.05) 100%);
+            border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+            z-index: -1;
+            animation: float 25s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(30px, -30px) rotate(120deg);
+            }
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+        }
+
+        /* Login Container */
+        .login-container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* Logo/Brand */
+        .brand-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .brand-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .brand-logo i {
+            font-size: 40px;
+            color: white;
+        }
+
+        .brand-text h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            font-size: 2.2rem;
+        }
+
+        .brand-text h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-text p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        /* Login Card */
+        .login-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            border: none;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: var(--gradient);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-bottom: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.3;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(30px, 30px);
+            }
+        }
+
+        .card-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .card-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        /* Form Elements */
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label i {
+            color: var(--primary-color);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            z-index: 5;
+        }
+
+        .form-control {
+            padding: 16px 16px 16px 50px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            height: 56px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: var(--input-shadow);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #adb5bd;
+        }
+
+        /* Password Toggle */
+        .password-toggle {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        /* Forgot Password */
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 24px;
+        }
+
+        .forgot-password a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .forgot-password a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Login Button */
+        .login-btn {
+            background: var(--gradient);
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .login-btn:hover::after {
+            left: 100%;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            color: #adb5bd;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e9ecef;
+        }
+
+        .divider span {
+            padding: 0 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Alternative Login Options */
+        .social-login {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .social-btn i {
+            font-size: 1.2rem;
+        }
+
+        .google-btn:hover i {
+            color: #DB4437;
+        }
+
+        .github-btn:hover i {
+            color: #333;
+        }
+
+        /* Signup Link */
+        .signup-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .signup-link p {
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .signup-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .signup-link a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Footer */
+        .login-footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .card-body {
+                padding: 30px 20px;
+            }
+            
+            .social-login {
+                flex-direction: column;
+            }
+            
+            .brand-text h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Alert message styling */
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 350px;
+        }
+
+        .custom-alert {
+            background: white;
+            border-left: 5px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 15px 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .custom-alert i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background shapes -->
+    <div class="bg-shape-1"></div>
+    <div class="bg-shape-2"></div>
+
+    <!-- Main Container -->
+    <div class="login-container">
+        <!-- Brand Section -->
+        <div class="brand-section">
+            <div class="brand-logo">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <div class="brand-text">
+                <h1>Edu<span>Bridge</span></h1>
+                <p>Student Learning Platform</p>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <form method="POST" class="login-form">
+            {% csrf_token %}
+            
+            <div class="card login-card">
+                <div class="card-header">
+                    <h3>Welcome Back!</h3>
+                    <p>Sign in to continue your learning journey</p>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Email/Username Field -->
+                    <div class="input-group">
+                        <span class="input-icon">
+                            <i class="bi bi-person-fill"></i>
+                        </span>
+                        <input type="text" id="id_login" name="email" class="form-control"
+                               placeholder="Enter email or username" required>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="input-group">
+                        <span class="input-icon">
+                            <i class="bi bi-lock-fill"></i>
+                        </span>
+                        <input type="password" id="id_password" name="password" class="form-control"
+                               placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+
+                    <!-- Forgot Password -->
+                    <div class="forgot-password">
+                        <a href="#">
+                            <i class="bi bi-key"></i>
+                            Forgot Password?
+                        </a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="login-btn">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        Sign In
+                    </button>
+
+                    <!-- Signup Link -->
+                    <div class="signup-link">
+                        <p>Don't have an account?</p>
+                        <a href="{% url 'userregister' %}">
+                            <i class="bi bi-person-plus"></i>
+                            Create Account
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Footer -->
+        <div class="login-footer">
+            <p>© 2025 EduBridge. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    {% if msg %}
+    <div class="alert-container">
+        <div class="custom-alert">
+            <i class="bi bi-info-circle-fill"></i>
+            <div>
+                <strong>Notice</strong>
+                <p style="margin: 0; font-size: 0.95rem;">{{ msg }}</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('id_password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        });
+
+        // Form validation
+        document.querySelector('.login-form').addEventListener('submit', function(e) {
+            const email = document.getElementById('id_login').value.trim();
+            const password = document.getElementById('id_password').value.trim();
+            
+            if (!email) {
+                e.preventDefault();
+                showValidationError('Please enter your email or username');
+                return;
+            }
+            
+            if (!password) {
+                e.preventDefault();
+                showValidationError('Please enter your password');
+                return;
+            }
+        });
+
+        // Show validation error
+        function showValidationError(message) {
+            // Remove existing alerts
+            const existingAlert = document.querySelector('.alert-container');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            // Create new alert
+            const alertContainer = document.createElement('div');
+            alertContainer.className = 'alert-container';
+            alertContainer.innerHTML = `
+                <div class="custom-alert">
+                    <i class="bi bi-exclamation-triangle-fill" style="color: #ff6b6b;"></i>
+                    <div>
+                        <strong style="color: #ff6b6b;">Validation Error</strong>
+                        <p style="margin: 0; font-size: 0.95rem;">${message}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(alertContainer);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (alertContainer.parentNode) {
+                    alertContainer.remove();
+                }
+            }, 5000);
+        }
+
+        // Auto remove alert after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alertContainer = document.querySelector('.alert-container');
+            if (alertContainer) {
+                setTimeout(() => {
+                    if (alertContainer.parentNode) {
+                        alertContainer.remove();
+                    }
+                }, 5000);
+            }
+        });
+
+        // Social login buttons
+        document.querySelector('.google-btn').addEventListener('click', function() {
+            alert('Google login would be implemented here');
+        });
+
+        document.querySelector('.github-btn').addEventListener('click', function() {
+            alert('GitHub login would be implemented here');
+        });
+    </script>
+</body>
+</html>

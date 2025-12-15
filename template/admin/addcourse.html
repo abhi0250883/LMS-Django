@@ -1,0 +1,781 @@
+{% extends './admin_sidebar.html' %}
+{% block content %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Course | Admin Panel</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3a0ca3;
+      --success-color: #06d6a0;
+      --light-bg: #f8f9fa;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      padding-left: 250px;
+    }
+    
+    @media (max-width: 992px) {
+      body {
+        padding-left: 0;
+      }
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card-header-custom {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border-bottom: none;
+    }
+
+    .form-section {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid var(--primary-color);
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .form-section:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--hover-shadow);
+    }
+
+    .form-section-title {
+      color: var(--primary-color);
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.2rem;
+      border-bottom: 2px solid #e9ecef;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-section-title i {
+      background: var(--primary-color);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .required-field::after {
+      content: " *";
+      color: #e63946;
+      font-weight: bold;
+    }
+
+    .form-control, .form-select {
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      transition: all 0.3s;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+    }
+
+    .form-control::placeholder {
+      color: #adb5bd;
+    }
+
+    .input-group-text {
+      background-color: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-right: none;
+    }
+
+    .form-text {
+      color: #6c757d;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+      padding-left: 0.25rem;
+    }
+
+    .file-upload-area {
+      border: 2px dashed #dee2e6;
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      background: #f8f9fa;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .file-upload-area:hover {
+      border-color: var(--primary-color);
+      background: #e9ecef;
+    }
+
+    .file-upload-area.drag-over {
+      border-color: var(--success-color);
+      background: rgba(6, 214, 160, 0.1);
+    }
+
+    .file-upload-icon {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .file-info {
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .preview-img {
+      width: 100%;
+      max-width: 200px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 1rem;
+      border: 2px solid #dee2e6;
+      display: none;
+    }
+
+    .character-counter {
+      font-weight: 600;
+      color: #6c757d;
+    }
+
+    .character-counter.warning {
+      color: #ffb703;
+    }
+
+    .character-counter.danger {
+      color: #e63946;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--success-color), #0cb48a);
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(6, 214, 160, 0.4);
+    }
+
+    .btn-reset {
+      border-radius: 8px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+    }
+
+    .btn-cancel {
+      border-radius: 8px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+    }
+
+    .alert-custom {
+      background: linear-gradient(135deg, #e7f5ff, #d0ebff);
+      border: none;
+      border-radius: 10px;
+      border-left: 4px solid var(--primary-color);
+      color: #1864ab;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-floating > .form-control {
+      height: calc(3.5rem + 2px);
+      min-height: calc(3.5rem + 2px);
+    }
+
+    .form-floating > label {
+      padding: 1rem 0.75rem;
+    }
+
+    .floating-label-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .floating-label-group label {
+      position: absolute;
+      top: -0.5rem;
+      left: 0.75rem;
+      background: white;
+      padding: 0 0.5rem;
+      font-size: 0.85rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      z-index: 10;
+    }
+
+    /* Animation for form sections */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-section {
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    /* Step indicator */
+    .form-progress {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .form-progress::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #e9ecef;
+      z-index: 1;
+    }
+
+    .progress-step {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #6c757d;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s;
+    }
+
+    .progress-step.active {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+      color: white;
+    }
+
+    .progress-step.completed {
+      background: var(--success-color);
+      border-color: var(--success-color);
+      color: white;
+    }
+
+    .progress-label {
+      position: absolute;
+      top: 45px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+
+    .progress-step.active .progress-label {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .form-section {
+        padding: 1rem;
+      }
+      
+      .btn-submit, .btn-reset, .btn-cancel {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      
+      .form-progress {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+      
+      .form-progress::before {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-light">
+  <div class="container-fluid py-4 main-container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header card-header-custom text-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h3 class="m-0"><i class="bi bi-plus-circle me-2"></i>Add New Course</h3>
+                <p class="m-0 mt-2 opacity-75">Fill in the details below to create a new course</p>
+              </div>
+              <a href="{% url 'admin_view_course' %}" class="btn btn-light btn-sm rounded-pill">
+                <i class="bi bi-arrow-left me-1"></i>Back to Courses
+              </a>
+            </div>
+          </div>
+
+          <div class="card-body p-4">
+            <!-- Progress Indicator -->
+            <div class="form-progress mb-4">
+              <div class="progress-step active">
+                <span>1</span>
+                <span class="progress-label">Basic Info</span>
+              </div>
+              <div class="progress-step">
+                <span>2</span>
+                <span class="progress-label">Course Details</span>
+              </div>
+              <div class="progress-step">
+                <span>3</span>
+                <span class="progress-label">Materials</span>
+              </div>
+              <div class="progress-step">
+                <span>4</span>
+                <span class="progress-label">Review</span>
+              </div>
+            </div>
+
+            <div class="alert alert-custom mb-4">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-info-circle-fill me-3 fs-5"></i>
+                <div>
+                  <strong>Note:</strong> Fields marked with <span class="text-danger fw-bold">*</span> are required.
+                  Please ensure all information is accurate before submitting.
+                </div>
+              </div>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" id="courseForm" novalidate>
+              {% csrf_token %}
+
+              <!-- Section 1: Basic Information -->
+              <div class="form-section">
+                <h5 class="form-section-title">
+                  <i class="bi bi-card-text"></i>Basic Information
+                </h5>
+                
+                <div class="floating-label-group">
+                  <label for="title" class="form-label required-field">Course Title</label>
+                  <input type="text" class="form-control" name="title" id="title" required 
+                         placeholder="Introduction to Python Programming">
+                  <div class="form-text">Enter a clear and descriptive title for your course</div>
+                </div>
+
+                <div class="floating-label-group">
+                  <label for="description" class="form-label required-field">Course Description</label>
+                  <textarea class="form-control" name="description" id="description" rows="4" required
+                            placeholder="Provide a comprehensive overview of what students will learn in this course..."></textarea>
+                  <div class="d-flex justify-content-between mt-2">
+                    <div class="form-text">Detailed description helps attract more students</div>
+                    <div id="descCounter" class="character-counter">0/1000</div>
+                  </div>
+                </div>
+
+                <div class="floating-label-group">
+                  <label for="prerequisites" class="form-label">Prerequisites (Optional)</label>
+                  <textarea class="form-control" name="prerequisites" id="prerequisites" rows="3"
+                            placeholder="Basic computer knowledge, familiarity with programming concepts..."></textarea>
+                  <div class="form-text">List any prior knowledge or skills students should have</div>
+                </div>
+              </div>
+
+              <!-- Section 2: Course Details -->
+              <div class="form-section">
+                <h5 class="form-section-title">
+                  <i class="bi bi-person-badge"></i>Course Details
+                </h5>
+                
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="floating-label-group">
+                      <label for="instructor" class="form-label required-field">Instructor Name</label>
+                      <input type="text" class="form-control" name="instructor" id="instructor" required
+                             placeholder="Dr. John Smith">
+                      <div class="form-text">Primary instructor for this course</div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="floating-label-group">
+                      <label for="price" class="form-label required-field">Course Price</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-white">₹</span>
+                        <input type="number" step="0.01" min="0" class="form-control" name="price" id="price" required
+                               placeholder="0.00">
+                        <span class="input-group-text bg-white">.00</span>
+                      </div>
+                      <div class="form-text">Enter 0 for a free course</div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="floating-label-group">
+                      <label for="duration" class="form-label">Course Duration (Optional)</label>
+                      <input type="text" class="form-control" name="courseduration" id="duration" 
+                             placeholder="8 weeks (30 hours total)">
+                      <div class="form-text">Estimated time to complete the course</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 3: Course Materials -->
+              <div class="form-section">
+                <h5 class="form-section-title">
+                  <i class="bi bi-paperclip"></i>Course Materials
+                </h5>
+                
+                <div class="row g-4">
+                  <div class="col-md-6">
+                    <div class="file-upload-area" id="imageUploadArea">
+                      <div class="file-upload-icon">
+                        <i class="bi bi-image"></i>
+                      </div>
+                      <h6 class="mb-2">Course Thumbnail</h6>
+                      <p class="text-muted small mb-3">Click or drag to upload image</p>
+                      <input type="file" class="d-none" id="imageInput" name="image" accept="image/*">
+                      <div class="file-info" id="imageInfo">No file chosen</div>
+                      <img id="imagePreview" class="preview-img" src="" alt="Preview">
+                      <div class="form-text mt-2">Recommended: 1280×720px, JPG/PNG, max 5MB</div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="file-upload-area" id="pdfUploadArea">
+                      <div class="file-upload-icon">
+                        <i class="bi bi-file-earmark-pdf"></i>
+                      </div>
+                      <h6 class="mb-2">Course Materials (PDF)</h6>
+                      <p class="text-muted small mb-3">Click or drag to upload PDF</p>
+                      <input type="file" class="d-none" id="pdfInput" name="pdf_material" accept="application/pdf">
+                      <div class="file-info" id="pdfInfo">No file chosen</div>
+                      <div class="form-text mt-2">Optional: Syllabus, reading materials, assignments</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Actions -->
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-5 pt-4 border-top">
+                <div class="mb-3 mb-md-0">
+                  <button type="submit" class="btn btn-submit">
+                    <i class="bi bi-check-circle me-2"></i>Create Course
+                  </button>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                  <button type="reset" class="btn btn-outline-secondary btn-reset">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Reset Form
+                  </button>
+                  <a href="/coursedetail" class="btn btn-secondary btn-cancel">
+                    <i class="bi bi-x-lg me-2"></i>Cancel
+                  </a>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+          <div class="card-footer bg-transparent border-top text-center py-3">
+            <small class="text-muted">
+              <i class="bi bi-shield-check me-1"></i>
+              All data is securely stored and protected
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Character counter with color coding
+    const description = document.getElementById('description');
+    const descCounter = document.getElementById('descCounter');
+    
+    description.addEventListener('input', function() {
+      const length = this.value.length;
+      descCounter.textContent = `${length}/1000`;
+      
+      // Color coding based on length
+      if (length > 900) {
+        descCounter.className = 'character-counter danger';
+      } else if (length > 700) {
+        descCounter.className = 'character-counter warning';
+      } else {
+        descCounter.className = 'character-counter';
+      }
+    });
+
+    // Drag and drop functionality for file uploads
+    function setupFileUpload(areaId, inputId, infoId, previewId = null) {
+      const uploadArea = document.getElementById(areaId);
+      const fileInput = document.getElementById(inputId);
+      const fileInfo = document.getElementById(infoId);
+      const preview = previewId ? document.getElementById(previewId) : null;
+
+      // Click to upload
+      uploadArea.addEventListener('click', () => fileInput.click());
+
+      // Drag and drop events
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, highlight, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, unhighlight, false);
+      });
+
+      function highlight() {
+        uploadArea.classList.add('drag-over');
+      }
+
+      function unhighlight() {
+        uploadArea.classList.remove('drag-over');
+      }
+
+      // Handle dropped files
+      uploadArea.addEventListener('drop', handleDrop, false);
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        fileInput.files = files;
+        handleFiles(files);
+      }
+
+      // Handle file selection
+      fileInput.addEventListener('change', function() {
+        handleFiles(this.files);
+      });
+
+      function handleFiles(files) {
+        const file = files[0];
+        if (file) {
+          const fileSize = file.size / 1024 / 1024; // MB
+          const fileSizeText = fileSize < 1 
+            ? `${(file.size / 1024).toFixed(2)} KB` 
+            : `${fileSize.toFixed(2)} MB`;
+          
+          fileInfo.textContent = `${file.name} (${fileSizeText})`;
+          
+          // Preview image if applicable
+          if (preview && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              preview.src = e.target.result;
+              preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+          }
+        } else {
+          fileInfo.textContent = 'No file chosen';
+          if (preview) {
+            preview.style.display = 'none';
+          }
+        }
+      }
+    }
+
+    // Initialize file upload areas
+    setupFileUpload('imageUploadArea', 'imageInput', 'imageInfo', 'imagePreview');
+    setupFileUpload('pdfUploadArea', 'pdfInput', 'pdfInfo');
+
+    // Form validation with better UX
+    document.getElementById('courseForm').addEventListener('submit', function(e) {
+      const requiredFields = this.querySelectorAll('[required]');
+      let isValid = true;
+      let firstInvalidField = null;
+
+      requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = field;
+          
+          // Add error styling
+          field.classList.add('is-invalid');
+          const feedback = field.nextElementSibling;
+          if (feedback && feedback.classList.contains('form-text')) {
+            feedback.innerHTML = `<span class="text-danger">This field is required</span>`;
+          }
+        } else {
+          field.classList.remove('is-invalid');
+        }
+      });
+
+      if (!isValid) {
+        e.preventDefault();
+        firstInvalidField.focus();
+        
+        // Show error toast
+        showToast('Please fill in all required fields', 'danger');
+        return false;
+      }
+      
+      // Show success toast on valid form
+      showToast('Course created successfully!', 'success');
+      return true;
+    });
+
+    // Toast notification function
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      const bgColor = type === 'success' ? 'bg-success' : type === 'danger' ? 'bg-danger' : 'bg-info';
+      
+      toast.className = 'position-fixed top-0 end-0 p-3';
+      toast.style.zIndex = '1055';
+      toast.innerHTML = `
+        <div class="toast show" role="alert">
+          <div class="toast-header ${bgColor} text-white">
+            <strong class="me-auto">${type.charAt(0).toUpperCase() + type.slice(1)}</strong>
+            <button type="button" class="btn-close btn-close-white" onclick="this.closest('.toast').remove()"></button>
+          </div>
+          <div class="toast-body">
+            ${message}
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 5000);
+    }
+
+    // Progress indicator interaction
+    document.querySelectorAll('.form-control').forEach(field => {
+      field.addEventListener('focus', function() {
+        this.parentElement.classList.add('focused');
+      });
+      
+      field.addEventListener('blur', function() {
+        if (!this.value) {
+          this.parentElement.classList.remove('focused');
+        }
+      });
+    });
+
+    // Auto-save draft functionality (optional)
+    let autoSaveTimer;
+    const form = document.getElementById('courseForm');
+    
+    form.addEventListener('input', function() {
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(() => {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+          if (value) data[key] = value;
+        });
+        
+        // Save to localStorage (for demo)
+        localStorage.setItem('courseDraft', JSON.stringify(data));
+        console.log('Draft saved');
+      }, 2000);
+    });
+
+    // Load draft on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const draft = localStorage.getItem('courseDraft');
+      if (draft) {
+        const data = JSON.parse(draft);
+        Object.keys(data).forEach(key => {
+          const field = form.querySelector(`[name="${key}"]`);
+          if (field && !field.value) {
+            field.value = data[key];
+          }
+        });
+      }
+    });
+
+    // Form reset handler
+    form.addEventListener('reset', function() {
+      localStorage.removeItem('courseDraft');
+      document.querySelectorAll('.is-invalid').forEach(el => {
+        el.classList.remove('is-invalid');
+      });
+      showToast('Form has been reset', 'info');
+    });
+
+    // Bootstrap tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+      const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      tooltips.forEach(tooltip => {
+        new bootstrap.Tooltip(tooltip);
+      });
+    });
+  </script>
+
+  {% if msg %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const msg = "{{msg}}";
+      if (msg) {
+        const type = msg.includes('success') || msg.includes('Success') ? 'success' : 'info';
+        showToast(msg, type);
+      }
+    });
+  </script>
+  {% endif %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}
